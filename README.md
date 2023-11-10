@@ -1,0 +1,2 @@
+# Description
+Ce projet vise à concevoir et implémenter un système de recommandation de films en temps réel, en utilisant EK Stack, Kafka, et une API de recommandation personnalisée , pour améliorer l'expérience utilisateur sur la plateforme de streaming de Jay-Zz Entertainment.
