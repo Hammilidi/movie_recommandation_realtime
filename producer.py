@@ -8,7 +8,10 @@ import json
 logging.basicConfig(level=logging.INFO)
 
 # Configuration du producteur Kafka
-producer = KafkaProducer(bootstrap_servers='localhost:9092', value_serializer=lambda v: str(v).encode('utf-8'))
+producer = KafkaProducer(
+    bootstrap_servers='localhost:9092',
+    value_serializer=lambda v: json.dumps(v).encode('utf-8')  # Serialize data to JSON and then encode to UTF-8
+)
 
 # Fonction pour envoyer des données au topic Kafka
 def send_movie_data_to_kafka(movie_data):
@@ -18,17 +21,6 @@ def send_movie_data_to_kafka(movie_data):
         logging.info(f'Données envoyées : {movie_data}')
     except Exception as e:
         logging.error(f'Erreur lors de l\'envoi des données : {str(e)}')
-        
-    
-# # Function to save movie data to a JSON file
-# def save_movie_data_to_json(movie_data, file_path='movie_data.json'):
-#     try:
-#         with open(file_path, 'a') as json_file:
-#             json.dump(movie_data, json_file)
-#         logging.info(f'Données enregistrées dans le fichier JSON : {file_path}')
-#     except Exception as e:
-#         logging.error(f'Erreur lors de l\'enregistrement des données dans le fichier JSON : {str(e)}')
-
 
 # Simulation de la collecte de données MovieLens toutes les 2 secondes
 while True:  
@@ -41,9 +33,7 @@ while True:
     if response.status_code == 200:
         movie_data = response.json()
         send_movie_data_to_kafka(movie_data)
-        # Save movie data to JSON file
-        # save_movie_data_to_json(movie_data)
         time.sleep(2)  # Pause de 2 secondes entre les envois
 
 # Close the Kafka producer after use
-producer.close()
+# producer.close()
